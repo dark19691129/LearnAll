@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace绑定�?个对应的Dao/Mapper接口或�??-->
+<mapper namespace="com.cb414.dao.UserMapper">
+<!-- 与Dao/Mapper接口建立联系   -->
+    <select id="getUserList" resultType="User">
+        SELECT * FROM mybatis.user;
+    </select>
+
+    <select id="getUserById" parameterType="int" resultType="com.cb414.pojo.User">
+        SELECT * FROM mybatis.user WHERE id=#{id};
+    </select>
+
+<!--    模糊查询-->
+    <select id="getUserLike" resultType="com.cb414.pojo.User">
+        SELECT * FROM mybatis.user WHERE name like "%"#{value}"%"
+    </select>
+
+
+<!--    对象中的属�?�，可以直接取出来使�?-->
+    <insert id="addUser" parameterType="com.cb414.pojo.User">
+        INSERT into mybatis.user (id, name, pwd) values (#{id},#{name},#{pwd})
+    </insert>
+
+
+<!--&lt;!&ndash;    使用Map的野路子&ndash;&gt;-->
+<!--    &lt;!&ndash;    对象中的属�?�，可以直接取出来使�?&ndash;&gt;-->
+<!--    <insert id="addUser2" parameterType="map">-->
+<!--        INSERT into mybatis.user (id, pwd) values (#{userId},#{password})-->
+<!--    </insert>-->
+    
+<!--    更新用户-->
+    <update id="updateUser" parameterType="com.cb414.pojo.User">
+        update mybatis.user set name=#{name},pwd=#{pwd}  where id=#{id};
+    </update>
+
+<!--    删除用户-->
+    <delete id="deleteUser" parameterType="int">
+        delete from mybatis.user where id=#{id};
+    </delete>
+</mapper>

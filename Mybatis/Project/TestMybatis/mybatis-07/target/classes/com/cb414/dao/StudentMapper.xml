@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace绑定一个对应的Dao/Mapper接口或者-->
+<mapper namespace="com.cb414.dao.StudentMapper">
+
+
+<!--    思路
+        查询所有的学生信息
+        根据查询出来的学生的tid，寻找对应的老师！类似于子查询
+-->
+    <select id="getStudents" resultMap="StudentTeacher">
+        Select * from mybatis.student
+    </select>
+<!--    然而问题是，Student类中使用一个Teacher类作为属性，我们该怎么对这个Teacher属性赋值？？-->
+<!--    本质上是不是还是属性名和数据库的字段名不一致的问题，所以我们自然而然的使用ResultMap-->
+    <resultMap id="StudentTeacher" type="Student">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+<!--        此时对于Teacher属性，这种复杂的属性我们该怎么写-->
+<!--        对象用association-->
+<!--        集合用collection-->
+        <association property="teacher" column="tid" javaType="Teacher" select="getTeacher"/>
+    </resultMap>
+
+    <select id="getTeacher" resultType="Teacher">
+        SELECT * FROM teacher WHERE id=#{tid}
+    </select>
+    
+    
+<!--    =======================华丽的分割线============================-->
+    <select id="getStudents2" resultMap="StudentTeacher2">
+        SELECT s.id sid,s.name sname,t.name tname
+        FROM student s,teacher t
+        WHERE s.tid=t.id
+    </select>
+    
+    <resultMap id="StudentTeacher2" type="Student">
+        <result property="id" column="sid"/>
+        <result property="name" column="sname"/>
+        <association property="teacher" javaType="Teacher">
+            <result property="name" column="tname"/>
+        </association>
+    </resultMap>
+    
+    
+    
+</mapper>

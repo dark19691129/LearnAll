@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--核心配置文件-->
+<configuration>
+
+<!--    引入外部配置文件-->
+    <properties resource="db.properties">
+        <property name="username" value="root"/>
+        <property name="pwssword" value="111111"/>
+    </properties>
+
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    
+    <typeAliases>
+<!--        就是说将com.cb414.pojo.User的别名定义为User，在Mapper.xml文件中对com.cb414.pojo.User的引用可以使用别名来代替-->
+        <typeAlias type="com.cb414.pojo.User" alias="User"/>
+<!--        <package name="com.cb414.pojo"/>-->
+    </typeAliases>
+
+<!--    <typeAliases>-->
+<!--        <package name="com.cb414.pojo"/>-->
+<!--    </typeAliases>-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--每一个Mapper.xml都需要在mybatis核心配置文件中注册！！！！！！！！！�?-->
+    <!--换句话说就是mybatis不知道那些mapper.xml在哪里，你需要对其进行注�?    -->
+    <mappers>
+       <mapper class="com.cb414.dao.UserMapper"/>
+    </mappers>
+
+
+
+</configuration>

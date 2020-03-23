@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace绑定一个对应的Dao/Mapper接口或者-->
+<mapper namespace="com.cb414.dao.UserMapper">
+
+<!--    在当前Mapper.xml中开启二级缓存
+        方式是FIFO
+        每个60秒刷新一次缓存
+        最多只能存512个缓存
+        是否只读：是
+-->
+    <cache  eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true"/>
+
+    <select id="getUserById" resultType="User">
+        SELECT * FROM mybatis.user WHERE id=#{id}
+    </select>
+
+</mapper>

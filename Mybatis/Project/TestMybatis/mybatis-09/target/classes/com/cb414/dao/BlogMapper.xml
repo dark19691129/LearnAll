@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace绑定一个对应的Dao/Mapper接口或者-->
+<mapper namespace="com.cb414.dao.BlogMapper">
+
+    <insert id="addBlog" parameterType="blog">
+        insert into mybatis.bolg (id, title, author, creat_time, views)
+        values (#{id},#{title},#{author},#{creatTime},#{views});
+    </insert>
+
+
+    <select id="queryBlogIf" parameterType="map" resultType="Blog">
+        SELECT * FROM mybatis.bolg WHERE 1=1
+        <if test="title != null">
+            AND title = #{title}
+        </if>
+        <if test="author != null">
+            AND author = #{author}
+        </if>
+    </select>
+    
+    <sql id="if-author-title">
+        <choose>
+            <when test="title != null">
+                title = #{title}
+            </when>
+            <when test="author != null">
+                AND author=#{author}
+            </when>
+            <otherwise>
+                AND views=#{views}
+            </otherwise>
+        </choose>
+    </sql>
+    
+    <select id="queryBlogChoose" parameterType="map" resultType="Blog">
+        SELECT * FROM mybatis.bolg
+        <where>
+<!--            <if test="title != null">-->
+<!--                title = #{title}-->
+<!--            </if>-->
+<!--            <if test="author!=null">-->
+<!--                and author=#{author}-->
+<!--            </if>-->
+
+
+<!--            <choose>-->
+<!--                <when test="title != null">-->
+<!--                    title = #{title}-->
+<!--                </when>-->
+<!--                <when test="author != null">-->
+<!--                    AND author=#{author}-->
+<!--                </when>-->
+<!--                <otherwise>-->
+<!--                    AND views=#{views}-->
+<!--                </otherwise>-->
+<!--            </choose>-->
+            <include refid="if-author-title"></include>
+        </where>
+    </select>
+
+    <update id="updateBlog" parameterType="map">
+        update mybatis.bolg
+        <set>
+            <if test="title != null">
+                title=#{title},
+            </if>
+            <if test="author != null">
+                author=#{author}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="queryBlogForeach" parameterType="map" resultType="Blog">
+        SELECT * FROM mybatis.bolg
+        
+        <where>
+            <foreach collection="ids" item="id" open="and (" close=")" separator="or">
+                id=#{id}
+            </foreach>
+        </where>
+        
+    </select>
+
+
+
+</mapper>
